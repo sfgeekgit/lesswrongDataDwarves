@@ -14,6 +14,12 @@ from sklearn.preprocessing import StandardScaler
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"{device=}")
 
+seed_value = 777
+
+# Set seeds to ensure reproducibility
+torch.manual_seed(seed_value)
+
+
 
 # Load the dataset
 df = pd.read_csv('dwarves_formated.csv')
