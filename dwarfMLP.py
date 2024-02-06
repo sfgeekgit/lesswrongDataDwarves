@@ -38,10 +38,17 @@ X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
 # Convert to PyTorch tensors
-X_train_tensor = torch.tensor(X_train_scaled, dtype=torch.float)
-y_train_tensor = torch.tensor(y_train.values, dtype=torch.float)
-X_test_tensor = torch.tensor(X_test_scaled, dtype=torch.float)
-y_test_tensor = torch.tensor(y_test.values, dtype=torch.float)
+X_train_tensor = torch.tensor(X_train_scaled, dtype=torch.float).to(device)
+y_train_tensor = torch.tensor(y_train.values, dtype=torch.float).view(-1, 1).to(device)
+X_test_tensor = torch.tensor(X_test_scaled, dtype=torch.float).to(device)
+y_test_tensor = torch.tensor(y_test.values, dtype=torch.float).view(-1, 1).to(device)
+
+#X_train_tensor = torch.tensor(X_train_scaled, dtype=torch.float)
+#y_train_tensor = torch.tensor(y_train.values, dtype=torch.float)
+#X_test_tensor = torch.tensor(X_test_scaled, dtype=torch.float)
+#y_test_tensor = torch.tensor(y_test.values, dtype=torch.float)
+
+
 
 # Create TensorDatasets and DataLoaders
 train_dataset = TensorDataset(X_train_tensor, y_train_tensor.view(-1, 1))
@@ -79,7 +86,10 @@ class MLP(nn.Module):
         return self.layers(x)
 
 # Initialize the model, loss function, and optimizer
-model = MLP(X_train_tensor.shape[1])
+##model = MLP(X_train_tensor.shape[1])
+model = MLP(X_train_tensor.shape[1]).to(device)
+
+
 criterion = nn.MSELoss()  # Mean Squared Error Loss for regression tasks
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
@@ -87,7 +97,12 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 epochs = 1000
 for epoch in range(epochs):
     model.train()
+
     for data, targets in train_loader:
+
+        data, targets = data.to(device), targets.to(device) 
+
+
         # Zero the gradients
         optimizer.zero_grad()
         
