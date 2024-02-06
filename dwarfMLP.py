@@ -11,6 +11,10 @@ from sklearn.preprocessing import StandardScaler
 # so... that's like, one AI's opinion....
 
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f"{device=}")
+
+
 # Load the dataset
 df = pd.read_csv('dwarves_formated.csv')
 
