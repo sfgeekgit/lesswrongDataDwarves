@@ -81,7 +81,8 @@ class MLP(nn.Module):
         super(MLP, self).__init__()
         
         # trying a wiiide hidden, just trying what works?
-        hidden = 320
+        #hidden = 320
+        hidden = 128
         dropout = 0
         self.layers = nn.Sequential(
         nn.Linear(input_size, hidden),            
