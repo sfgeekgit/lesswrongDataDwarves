@@ -15,8 +15,9 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #device = "cpu"
 print(f"{device=}")
 
-# todo... currently drop FortSurvived from the data, maybe put that back in
-# to test: how does this perform on only forts that survived?  If it's near perfect then it's not prediting who survives.
+# todo... test: how does this perform on only forts that survived?  If it's near perfect then it's not prediting who survives.
+
+model_dir = "./models/"
 
 
 seed_value = 777   # rep-digits are fun and also easy to type
@@ -108,7 +109,7 @@ class MLP(nn.Module):
         nn.Dropout(dropout),
         nn.Linear(hidden, 1)
         )
-        print (self.layers)
+        #print (self.layers)
     
     def forward(self, x):
         return self.layers(x)
@@ -128,9 +129,8 @@ targets = y_train_tensor # [:2]  # test a tiny dataset
 data = X_train_tensor # [:2]    # test a tiny dataset
 
 
-
 # Training the model
-epochs = 10000
+epochs = 1000
 for epoch in range(epochs):
 
     model.train()
@@ -154,12 +154,33 @@ for epoch in range(epochs):
     optimizer.step()
 
     if epoch % 10 == 0:    
-        print(f'Epoch {epoch+1}, Loss: {loss.item()}')
+        print(f'Epoch {epoch}, Loss: {loss.item()}')
         #print(f"{outputs.shape=}")
         #print(f"{targets.shape=}")
 
 
 
-# Save the model...
+# Save the model to disk
+# check how many models are in the directory, and name the next one
+import os
+model_files = os.listdir(model_dir)
+model_path = model_dir + f'dwarfMLP_model_{len(model_files)}.pth'
+
+
+torch.save(model.state_dict(), model_path)
+print(f'Model saved to {model_path}')
         
+
+
 # Add code here to evaluate the model on the test set and make predictions
+
+'''
+# test a model saved to disk
+other_model_path = model_dir +  'dwarfMLP_model_8.pth'
+# Load the model from disk
+model.load_state_dict(torch.load(other_model_path))
+outputs = model(data)
+loss = criterion(outputs, targets)
+print(f'Load from disk, Loss: {loss.item()}')
+'''
+
