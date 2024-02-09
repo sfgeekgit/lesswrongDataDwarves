@@ -107,10 +107,48 @@ class MLP(nn.Module):
         nn.BatchNorm1d(hidden),
         nn.ReLU(),
         nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
         nn.Linear(hidden, 1)
         )
         #print (self.layers)
-    
+        lenlay = len(self.layers)
+        print(f"{lenlay=}")
+        
     def forward(self, x):
         return self.layers(x)
 
@@ -130,7 +168,7 @@ data = X_train_tensor # [:2]    # test a tiny dataset
 
 
 # Training the model
-epochs = 1000
+epochs = 150000
 for epoch in range(epochs):
 
     model.train()
@@ -164,7 +202,7 @@ for epoch in range(epochs):
 # check how many models are in the directory, and name the next one
 import os
 model_files = os.listdir(model_dir)
-model_path = model_dir + f'dwarfMLP_model_{len(model_files)}.pth'
+model_path = model_dir + f'dwarfMLP_e_{epochs}_lenlay_{lenlay}_{len(model_files)}.pth'
 
 
 torch.save(model.state_dict(), model_path)
