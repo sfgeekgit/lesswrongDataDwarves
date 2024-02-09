@@ -13,7 +13,7 @@ from sklearn.preprocessing import StandardScaler
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #device = "cpu"
-print(f"{device=}")
+print(f"{device=}", flush=True)
 
 # todo... test: how does this perform on only forts that survived?  If it's near perfect then it's not prediting who survives.
 
@@ -154,7 +154,7 @@ for epoch in range(epochs):
     optimizer.step()
 
     if epoch % 10 == 0:    
-        print(f'Epoch {epoch}, Loss: {loss.item()}')
+        print(f'Epoch {epoch}, Loss: {loss.item()}',  flush=True)
         #print(f"{outputs.shape=}")
         #print(f"{targets.shape=}")
 
@@ -168,7 +168,7 @@ model_path = model_dir + f'dwarfMLP_model_{len(model_files)}.pth'
 
 
 torch.save(model.state_dict(), model_path)
-print(f'Model saved to {model_path}')
+print(f'Model saved to {model_path}',  flush=True)
         
 
 
