@@ -29,8 +29,17 @@ torch.manual_seed(seed_value)
 ## Data loader is bottleneck on GPU, makes cuda basically useless
 
 
+
+datafile = 'data_trunced.csv'
+trunc = True
+if trunc:
+    datafile = 'data_trunced.csv'
+
+
 # Load the dataset
-df = pd.read_csv('dwarves_formated.csv')
+#df = pd.read_csv('dwarves_formated.csv')
+#df =  pd.read_csv('data_trunced.csv')
+df =  pd.read_csv(datafile)
 
 # Drop the columns not used for training
 df = df.drop(['ID', 'FortSurvived'], axis=1)
@@ -147,6 +156,7 @@ class MLP(nn.Module):
         )
         #print (self.layers)
         lenlay = len(self.layers)
+        self.lenlay = lenlay
         print(f"{lenlay=}")
         
     def forward(self, x):
@@ -192,7 +202,7 @@ for epoch in range(epochs):
     optimizer.step()
 
     if epoch % 10 == 0:    
-        print(f'Epoch {epoch}, Loss: {loss.item()}',  flush=True)
+        print(f'Epoch {epoch}, Layers: {model.lenlay} Loss: {loss.item()}',  flush=True)
         #print(f"{outputs.shape=}")
         #print(f"{targets.shape=}")
 
@@ -202,7 +212,8 @@ for epoch in range(epochs):
 # check how many models are in the directory, and name the next one
 import os
 model_files = os.listdir(model_dir)
-model_path = model_dir + f'dwarfMLP_e_{epochs}_lenlay_{lenlay}_{len(model_files)}.pth'
+lenlay = model.lenlay
+model_path = model_dir + f'dwarfMLP_e_{epochs}_lenlay_{lenlay}_truc.pth'
 
 
 torch.save(model.state_dict(), model_path)
