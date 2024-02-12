@@ -144,6 +144,14 @@ class MLP(nn.Module):
         nn.BatchNorm1d(hidden),
         nn.ReLU(),
         nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden, hidden),
+        nn.BatchNorm1d(hidden),
+        nn.ReLU(),
+        nn.Dropout(dropout),
         nn.Linear(hidden, 1)
         )
         #print (self.layers)
